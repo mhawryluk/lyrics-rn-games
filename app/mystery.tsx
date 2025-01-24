@@ -36,6 +36,13 @@ export default function Mystery() {
   );
 }
 
+function transformWord(word: string) {
+  return word
+    .toLowerCase()
+    .replaceAll(/[',\.\(\)]/g, "")
+    .trim();
+}
+
 function MysteryLyricsGame() {
   const [guessedWords, setGuessedWords] = useState(new Set());
   const [input, setInput] = useState("");
@@ -44,12 +51,7 @@ function MysteryLyricsGame() {
     () =>
       new Set(
         mysteryLyrics
-          .map((word) =>
-            word
-              .toLowerCase()
-              .replaceAll(/[',\.\(\)]/g, "")
-              .trim()
-          )
+          .flatMap((verse) => verse.map(transformWord))
           .filter((word) => word)
       ),
     [mysteryLyrics]
@@ -61,10 +63,7 @@ function MysteryLyricsGame() {
         <TextInput
           className="border-[#144E52] border-2 opacity-50 rounded-lg h-12 flex-1 p-2 text-[#144E52] font-bold"
           onChangeText={(text) => {
-            const guess = text
-              .toLowerCase()
-              .trim()
-              .replaceAll(/[',\.\(\)]/g, "");
+            const guess = transformWord(text);
 
             if (!guessedWords.has(guess) && allWords.has(guess)) {
               setGuessedWords(new Set(guessedWords).add(guess));
@@ -77,28 +76,28 @@ function MysteryLyricsGame() {
         />
         <Text className="text-[#144E52] text-2xl font-bold">
           {
-            mysteryLyrics.filter((word) => guessedWords.has(word.toLowerCase()))
-              .length
+            mysteryLyrics
+              .flat()
+              .filter((word) => guessedWords.has(transformWord(word))).length
           }
           /{mysteryLyrics.length}
         </Text>
       </View>
       <ScrollView className="h-[85%]">
-        <View className="flex-row flex-wrap gap-2">
-          {mysteryLyrics.map((word, i) =>
-            word.trim() !== "" ? (
-              <WordTile
-                word={word.trim()}
-                guessed={guessedWords.has(
-                  word
-                    .toLowerCase()
-                    .replaceAll(/[',\.\(\)]/g, "")
-                    .trim()
-                )}
-                key={i}
-              />
-            ) : null
-          )}
+        <View className="gap-10">
+          {mysteryLyrics.map((verse, i) => (
+            <View key={`${verse}_${i}`} className="flex-row flex-wrap gap-2">
+              {verse.map((word, i) =>
+                word.trim() !== "" ? (
+                  <WordTile
+                    word={word.trim()}
+                    guessed={guessedWords.has(transformWord(word))}
+                    key={i}
+                  />
+                ) : null
+              )}
+            </View>
+          ))}
         </View>
       </ScrollView>
     </View>
@@ -173,4 +172,6 @@ Tonight I'm gonna dance
 Like you were in this room
 But I don't wanna dance
 If I'm not dancing with you
-`.split(/\s/);
+`
+  .split("\n\n")
+  .map((verse) => verse.split(/\s/));
