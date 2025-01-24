@@ -11,13 +11,13 @@ export default function Daily() {
             <Ionicons
               name="chevron-back"
               className="text-white"
-              color="#B99257"
+              color="#AE7268"
               size={20}
             />
           </Pressable>
         </Link>
 
-        <Text className="text-[#B99257] text-xl font-bold">
+        <Text className="text-[#AE7268] text-xl font-bold">
           Lyric of the Day
         </Text>
 
@@ -25,7 +25,7 @@ export default function Daily() {
           <Ionicons
             name="menu"
             className="text-white"
-            color="#B99257"
+            color="#AE7268"
             size={24}
           />
         </View>
@@ -40,7 +40,7 @@ export default function Daily() {
 
 function LyricCard() {
   return (
-    <View className="bg-[#B99257] rounded-xl justify-center text-center items-center py-10 px-4">
+    <View className="bg-[#AE7268] rounded-xl justify-center text-center items-center py-10 px-4">
       <Text className="text-white font-bold font-mono text-xl leading-10">
         {lyrics}
       </Text>
