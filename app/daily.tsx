@@ -40,7 +40,7 @@ export default function Daily() {
 
 function LyricCard() {
   return (
-    <View className="bg-[#B99257] rounded-xl justify-center text-center items-center py-8 px-4 shadow">
+    <View className="bg-[#B99257] rounded-xl justify-center text-center items-center py-10 px-4">
       <Text className="text-white font-bold font-mono text-xl leading-10">
         {lyrics}
       </Text>
@@ -52,7 +52,7 @@ function LyricCard() {
   );
 }
 
-const lyrics = `
+const lyrics = `\
 We gather stones, 
 never knowing what they'll mean
 Some to throw, 
