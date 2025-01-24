@@ -4,7 +4,7 @@ import { Pressable, Text, View } from "react-native";
 export default function Index() {
   return (
     <View className="flex-1 justify-around items-center">
-      <Text className="text-5xl font-extrabold text-[#2E364B]">
+      <Text className="text-6xl font-extrabold text-[#2E364B]">
         Pubwe <Text className="opacity-50">Lyric Games</Text>
       </Text>
 

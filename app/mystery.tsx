@@ -117,7 +117,7 @@ function WordTile({ word, guessed }: { word: string; guessed: boolean }) {
   );
 }
 
-const mysteryLyrics = `
+const mysteryLyrics = `\
 I was reminiscing just the other day
 While having coffee all alone and Lord, it took me away
 Back to a first glance feeling on New York time
