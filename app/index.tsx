@@ -7,15 +7,30 @@ export default function Index() {
       <Text className="text-4xl font-extrabold text-[#2E364B]">
         Pubwe Lyric Games
       </Text>
-      <Link
-        href="./cryptogram"
-        asChild
-        className="bg-[#87A6BB] p-6 rounded-3xl self-stretch items-center"
-      >
-        <Pressable>
-          <Text className="text-2xl text-white font-bold">Cryptogram</Text>
-        </Pressable>
-      </Link>
+
+      <View className="self-stretch gap-4">
+        <Link
+          href="./mystery"
+          asChild
+          className="bg-[#AE7268] p-6 rounded-3xl self-stretch items-center"
+        >
+          <Pressable>
+            <Text className="text-2xl text-white font-bold">
+              Mystery Lyrics
+            </Text>
+          </Pressable>
+        </Link>
+
+        <Link
+          href="./cryptogram"
+          asChild
+          className="bg-[#87A6BB] p-6 rounded-3xl self-stretch items-center"
+        >
+          <Pressable>
+            <Text className="text-2xl text-white font-bold">Cryptogram</Text>
+          </Pressable>
+        </Link>
+      </View>
 
       <Text className="text-small font-light text-[#2E364B]">
         Created by M. Hawryluk, 2025
