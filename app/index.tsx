@@ -12,10 +12,10 @@ export default function Index() {
         <Link
           href="./cryptogram"
           asChild
-          className="bg-[#87A6BB] p-6 rounded-3xl self-stretch items-center"
+          className="bg-[#D08E54] p-6 rounded-3xl self-stretch items-center"
         >
           <Pressable>
-            <Text className="text-2xl text-white font-bold">🔎 Cryptogram</Text>
+            <Text className="text-2xl text-white font-bold">🤔 Cryptogram</Text>
           </Pressable>
         </Link>
 
@@ -26,7 +26,7 @@ export default function Index() {
         >
           <Pressable>
             <Text className="text-2xl text-white font-bold">
-              🤔 Mystery Lyrics
+              🔎 Mystery Lyrics
             </Text>
           </Pressable>
         </Link>

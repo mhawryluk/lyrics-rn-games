@@ -86,7 +86,7 @@ function MysteryLyricsGame() {
       <ScrollView className="h-[85%]">
         <View className="gap-10">
           {mysteryLyrics.map((verse, i) => (
-            <View key={`${verse}_${i}`} className="flex-row flex-wrap gap-2">
+            <View key={`${verse}_${i}`} className="flex-row flex-wrap gap-1">
               {verse.map((word, i) =>
                 word.trim() !== "" ? (
                   <WordTile
@@ -108,7 +108,7 @@ function WordTile({ word, guessed }: { word: string; guessed: boolean }) {
   return (
     <Text
       className={cs(
-        "p-2 text-md justify-center items-center font-mono font-bold",
+        "px-2 py-1 text-xl justify-center items-center font-mono font-bold rounded-lg",
         guessed ? "opacity-100 text-[#144E52]" : "bg-[#144E52] opacity-50"
       )}
     >

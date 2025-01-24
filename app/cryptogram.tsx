@@ -13,19 +13,19 @@ export default function Cryptogram() {
             <Ionicons
               name="chevron-back"
               className="text-white"
-              color="#87A6BB"
+              color="#D08E54"
               size={20}
             />
           </Pressable>
         </Link>
 
-        <Text className="text-[#87A6BB] text-xl font-bold">Cryptogram</Text>
+        <Text className="text-[#D08E54] text-xl font-bold">Cryptogram</Text>
 
         <Pressable className="p-2 items-center">
           <Ionicons
             name="menu"
             className="text-white"
-            color="#87A6BB"
+            color="#D08E54"
             size={24}
           />
         </Pressable>
@@ -39,9 +39,13 @@ export default function Cryptogram() {
 function shuffleArray(array: unknown[]) {
   const copy = [...array];
 
-  for (var i = copy.length - 1; i >= 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var temp = copy[i];
+  for (var i = copy.length - 1; i > 0; i--) {
+    let j: number | undefined;
+    while (j === undefined || copy[j] === copy[i]) {
+      j = Math.floor(Math.random() * i);
+    }
+
+    const temp = copy[i];
     copy[i] = copy[j];
     copy[j] = temp;
   }
@@ -61,9 +65,12 @@ const encoding = Object.fromEntries(
 );
 
 function CryptogramGame() {
-  const [selectedLetter, setSelectedLetter] = useState<string | undefined>(
-    undefined
-  );
+  const [selectedIndex, setSelectedIndex] = useState<[number, number]>([
+    -1, -1,
+  ]);
+  const selectedLetter = lyrics[selectedIndex[0]]
+    ? lyrics[selectedIndex[0]][selectedIndex[1]]
+    : undefined;
   const [answers, setAnswers] = useState<Record<string, string | undefined>>(
     {}
   );
@@ -82,7 +89,7 @@ function CryptogramGame() {
                     code={encoding[letter.toLowerCase()]!}
                     selected={selectedLetter === letter}
                     onClick={() => {
-                      setSelectedLetter(letter);
+                      setSelectedIndex([i, j]);
                     }}
                   />
                 ) : (
@@ -102,7 +109,29 @@ function CryptogramGame() {
       <Keyboard
         onLetterClick={(letter) => {
           if (selectedLetter) {
-            setAnswers((answers) => ({ ...answers, [selectedLetter]: letter }));
+            setAnswers((answers) => ({
+              ...answers,
+              [selectedLetter]: letter === " " ? undefined : letter,
+            }));
+            if (letter !== " ") {
+              setSelectedIndex(([i, j]) => {
+                let [newI, newJ] =
+                  j + 1 < lyrics[i].length ? [i, j + 1] : [i + 1, 0];
+
+                while (
+                  newI < lyrics.length &&
+                  (encoding[lyrics[newI][newJ]] === undefined ||
+                    answers[lyrics[newI][newJ]] !== undefined)
+                ) {
+                  [newI, newJ] =
+                    newJ + 1 < lyrics[newI].length
+                      ? [newI, newJ + 1]
+                      : [newI + 1, 0];
+                }
+
+                return [newI, newJ];
+              });
+            }
           }
         }}
       />
@@ -126,11 +155,11 @@ function LetterTile({
       <View className="justify-center">
         <Text
           className={cs(
-            "bg-[#87A6BB] p-3 text-2xl font-mono font-bold rounded-md",
-            selected ? "" : "opacity-50"
+            "bg-[#D08E54] p-3 text-2xl font-mono font-bold rounded-md",
+            selected ? "" : "bg-[#d08e5480]"
           )}
         >
-          {letter?.toUpperCase() ?? " "}
+          {letter?.toUpperCase() ?? ""}
         </Text>
         <Text className="p-3 text-2xl font-mono font-bold">
           {code?.toUpperCase()}
@@ -145,18 +174,21 @@ function Keyboard({
 }: {
   onLetterClick: (letter: string) => void;
 }) {
-  const letters = ["qwertyuiop", "asdfghjkl", "zxcvbnm_"];
+  const letters = ["qwertyuiop", "asdfghjkl", "zxcvbnm "];
   return (
-    <View className="bg-[#87A6BB] rounded-lg p-4">
-      {letters.map((row) => (
-        <View key={row} className="flex-row self-stretch justify-center">
-          {row.split("").map((letter) => (
-            <Pressable onPress={() => onLetterClick(letter)}>
-              <Text
-                key={letter}
-                className="font-extrabold text-white p-3 text-2xl"
-              >
-                {letter.toUpperCase()}
+    <View className="bg-[#D08E54] rounded-lg p-4">
+      {letters.map((row, i) => (
+        <View
+          key={`row_${row}_${i}`}
+          className="flex-row self-stretch justify-center"
+        >
+          {row.split("").map((letter, j) => (
+            <Pressable
+              key={`letter_${letter}_${j}`}
+              onPress={() => onLetterClick(letter)}
+            >
+              <Text className="font-extrabold text-white p-3 text-2xl">
+                {letter.toUpperCase() === " " ? "🧹" : letter.toUpperCase()}
               </Text>
             </Pressable>
           ))}
