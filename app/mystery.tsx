@@ -59,9 +59,9 @@ function MysteryLyricsGame() {
 
   return (
     <View className="gap-4 justify-end">
-      <View className="flex-row items-center gap-4 py-2">
+      <View className="flex-row items-center justify-between py-2">
         <TextInput
-          className="border-[#144E52] border-2 opacity-50 rounded-lg h-12 flex-1 p-2 text-[#144E52] font-bold"
+          className="border-[#144E52] border-2 opacity-50 rounded-lg h-12 max-w-[70%] flex-1 p-2 text-[#144E52] font-bold"
           onChangeText={(text) => {
             const guess = transformWord(text);
 
@@ -80,7 +80,7 @@ function MysteryLyricsGame() {
               .flat()
               .filter((word) => guessedWords.has(transformWord(word))).length
           }
-          /{mysteryLyrics.length}
+          /{mysteryLyrics.reduce((acc, x) => acc + x.length, 0)}
         </Text>
       </View>
       <ScrollView className="h-[85%]">
