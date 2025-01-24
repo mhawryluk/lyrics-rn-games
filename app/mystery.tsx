@@ -1,5 +1,5 @@
 import { Link } from "expo-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import cs from "classnames";
 import { View, Text, Pressable, ScrollView, TextInput } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -46,16 +46,45 @@ function transformWord(word: string) {
 function MysteryLyricsGame() {
   const [guessedWords, setGuessedWords] = useState(new Set());
   const [input, setInput] = useState("");
+  const songTitle = "State of Grace";
+
+  const [mysteryLyrics, setMysteryLyrics] = useState<string[][] | null>(null);
+
+  useEffect(() => {
+    fetch(
+      `https://lyrics.lewdhutao.my.eu.org/musixmatch/lyrics-search?title=${songTitle.replaceAll(
+        /\s/g,
+        "%20"
+      )}&artist=taylor%20swift`
+    )
+      .then((r) => r.json())
+      .then((json) => {
+        console.log(json);
+        setMysteryLyrics(
+          (json["lyrics"] ?? defaultMysteryLyrics)
+            .split("\n\n")
+            .map((verse: string) => verse.split(/\s/))
+        );
+      });
+  }, []);
 
   const allWords = useMemo(
     () =>
       new Set(
-        mysteryLyrics
+        (mysteryLyrics ?? [[]])
           .flatMap((verse) => verse.map(transformWord))
           .filter((word) => word)
       ),
     [mysteryLyrics]
   );
+
+  if (mysteryLyrics === null) {
+    return (
+      <View className="justify-center self-stretch">
+        <Text className="text-[#144E52] text-2xl font-bold">Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <View className="gap-4 justify-end">
@@ -117,7 +146,7 @@ function WordTile({ word, guessed }: { word: string; guessed: boolean }) {
   );
 }
 
-const mysteryLyrics = `\
+const defaultMysteryLyrics = `\
 I was reminiscing just the other day
 While having coffee all alone and Lord, it took me away
 Back to a first glance feeling on New York time
