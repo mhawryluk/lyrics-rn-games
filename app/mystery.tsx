@@ -1,35 +1,34 @@
 import { Link } from "expo-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import cs from "classnames";
 import { View, Text, Pressable, ScrollView, TextInput } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function Mystery() {
   return (
     <View>
       <View className="flex-row gap-4 items-center justify-between self-stretch py-4">
-        <Link
-          href="/"
-          asChild
-          className="bg-[#2E364B] p-2 rounded-xl items-center opacity-50"
-        >
+        <Link href="/" asChild className="p-2 items-center">
           <Pressable>
-            <Text className="text-xl text-white font-bold">Back</Text>
+            <Ionicons
+              name="chevron-back"
+              className="text-white"
+              color="#144E52"
+              size={20}
+            />
           </Pressable>
         </Link>
 
-        <Text className="text-[#AE7268] text-2xl font-bold">
-          Mystery Lyrics
-        </Text>
+        <Text className="text-[#144E52] text-xl font-bold">Mystery Lyrics</Text>
 
-        <Link
-          href="/"
-          asChild
-          className="bg-[#AE7268] p-2 rounded-xl items-center opacity-50"
-        >
-          <Pressable>
-            <Text className="text-xl text-white font-bold">Options</Text>
-          </Pressable>
-        </Link>
+        <Pressable className="p-2 items-center">
+          <Ionicons
+            name="menu"
+            className="text-white"
+            color="#144E52"
+            size={24}
+          />
+        </Pressable>
       </View>
 
       <MysteryLyricsGame />
@@ -41,19 +40,31 @@ function MysteryLyricsGame() {
   const [guessedWords, setGuessedWords] = useState(new Set());
   const [input, setInput] = useState("");
 
-  const allWords = new Set(
-    mysteryLyrics
-      .map((word) => word.toLowerCase().replaceAll(/[']/g, "").trim())
-      .filter((word) => word)
+  const allWords = useMemo(
+    () =>
+      new Set(
+        mysteryLyrics
+          .map((word) =>
+            word
+              .toLowerCase()
+              .replaceAll(/[',\.\(\)]/g, "")
+              .trim()
+          )
+          .filter((word) => word)
+      ),
+    [mysteryLyrics]
   );
 
   return (
     <View className="gap-4 justify-end">
       <View className="flex-row items-center gap-4 py-2">
         <TextInput
-          className="bg-[#2E364B] opacity-50 rounded-lg h-10 flex-1 p-2 text-white"
+          className="border-[#144E52] border-2 opacity-50 rounded-lg h-12 flex-1 p-2 text-[#144E52] font-bold"
           onChangeText={(text) => {
-            const guess = text.toLowerCase().trim().replaceAll(/[']/g, "");
+            const guess = text
+              .toLowerCase()
+              .trim()
+              .replaceAll(/[',\.\(\)]/g, "");
 
             if (!guessedWords.has(guess) && allWords.has(guess)) {
               setGuessedWords(new Set(guessedWords).add(guess));
@@ -64,7 +75,7 @@ function MysteryLyricsGame() {
           }}
           value={input}
         />
-        <Text className="text-[#AE7268] text-2xl font-bold">
+        <Text className="text-[#144E52] text-2xl font-bold">
           {
             mysteryLyrics.filter((word) => guessedWords.has(word.toLowerCase()))
               .length
@@ -78,7 +89,12 @@ function MysteryLyricsGame() {
             word.trim() !== "" ? (
               <WordTile
                 word={word.trim()}
-                guessed={guessedWords.has(word.toLowerCase())}
+                guessed={guessedWords.has(
+                  word
+                    .toLowerCase()
+                    .replaceAll(/[',\.\(\)]/g, "")
+                    .trim()
+                )}
                 key={i}
               />
             ) : null
@@ -93,8 +109,8 @@ function WordTile({ word, guessed }: { word: string; guessed: boolean }) {
   return (
     <Text
       className={cs(
-        "p-2 text-md rounded-lg justify-center items-center font-mono font-bold",
-        guessed ? "opacity-100 text-[#AE7268]" : "bg-[#AE7268] opacity-50"
+        "p-2 text-md justify-center items-center font-mono font-bold",
+        guessed ? "opacity-100 text-[#144E52]" : "bg-[#144E52] opacity-50"
       )}
     >
       {guessed ? word : " ".repeat(word.length)}
@@ -157,6 +173,4 @@ Tonight I'm gonna dance
 Like you were in this room
 But I don't wanna dance
 If I'm not dancing with you
-`
-  .replaceAll(/[,\.\(\)]/g, "")
-  .split(/\s/);
+`.split(/\s/);

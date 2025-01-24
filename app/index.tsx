@@ -22,7 +22,7 @@ export default function Index() {
         <Link
           href="./mystery"
           asChild
-          className="bg-[#AE7268] p-6 rounded-3xl self-stretch items-center"
+          className="bg-[#144E52] p-6 rounded-3xl self-stretch items-center"
         >
           <Pressable>
             <Text className="text-2xl text-white font-bold">
@@ -45,7 +45,7 @@ export default function Index() {
       </View>
 
       <Text className="text-small font-light text-[#2E364B] opacity-50">
-        Created by M. Hawryluk, 2025
+        @mhawryluk, 2025
       </Text>
     </View>
   );
