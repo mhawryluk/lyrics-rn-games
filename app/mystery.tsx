@@ -21,7 +21,7 @@ export default function Mystery() {
 
         <Text className="text-[#144E52] text-xl font-bold">Mystery Lyrics</Text>
 
-        <Pressable className="p-2 items-center">
+        <Pressable className="p-2 items-center opacity-0">
           <Ionicons
             name="menu"
             className="text-white"

@@ -21,7 +21,7 @@ export default function Cryptogram() {
 
         <Text className="text-[#D08E54] text-xl font-bold">Cryptogram</Text>
 
-        <Pressable className="p-2 items-center">
+        <Pressable className="p-2 items-center opacity-0">
           <Ionicons
             name="menu"
             className="text-white"
@@ -76,7 +76,7 @@ function CryptogramGame() {
   );
 
   return (
-    <View className="h-[90%] justify-between gap-4">
+    <View className="h-[92%] justify-between gap-4">
       <ScrollView className="h-full">
         <View className="flex-wrap flex-row gap-6">
           {lyrics.map((word, i) => (
@@ -107,6 +107,9 @@ function CryptogramGame() {
       </ScrollView>
 
       <Keyboard
+        usedLetters={Object.keys(answers).filter(
+          (letter) => answers[letter] !== undefined
+        )}
         onLetterClick={(letter) => {
           if (selectedLetter) {
             setAnswers((answers) => ({
@@ -170,8 +173,10 @@ function LetterTile({
 }
 
 function Keyboard({
+  usedLetters,
   onLetterClick,
 }: {
+  usedLetters: string[];
   onLetterClick: (letter: string) => void;
 }) {
   const letters = ["qwertyuiop", "asdfghjkl", "zxcvbnm "];
@@ -187,7 +192,12 @@ function Keyboard({
               key={`letter_${letter}_${j}`}
               onPress={() => onLetterClick(letter)}
             >
-              <Text className="font-extrabold text-white p-3 text-2xl">
+              <Text
+                className={cs(
+                  "font-extrabold text-white p-3 text-2xl",
+                  usedLetters.includes(letter) ? "opacity-50" : ""
+                )}
+              >
                 {letter.toUpperCase() === " " ? "🧹" : letter.toUpperCase()}
               </Text>
             </Pressable>
