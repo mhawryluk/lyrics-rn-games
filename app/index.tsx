@@ -1,3 +1,4 @@
+import Confetti from "@/components/Confetti";
 import { Link } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 
@@ -42,6 +43,10 @@ export default function Index() {
             </Text>
           </Pressable>
         </Link> */}
+      </View>
+
+      <View className="opacity-0 absolute inset-0">
+        <Confetti />
       </View>
     </View>
   );

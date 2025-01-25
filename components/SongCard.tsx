@@ -20,7 +20,7 @@ export function SongCard({
     >
       {colorOverlay && (
         <View
-          className="absolute left-0 right-0 top-0 bottom-0 opacity-50"
+          className="absolute inset-0 opacity-50"
           style={{ backgroundColor: colorOverlay }}
         />
       )}
