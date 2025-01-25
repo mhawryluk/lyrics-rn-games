@@ -31,7 +31,7 @@ export default function Index() {
           </Pressable>
         </Link>
 
-        <Link
+        {/* <Link
           href="./daily"
           asChild
           className="bg-[#AE7268] p-6 rounded-3xl self-stretch items-center"
@@ -41,7 +41,7 @@ export default function Index() {
               🗓️ Lyric of the Day
             </Text>
           </Pressable>
-        </Link>
+        </Link> */}
       </View>
     </View>
   );

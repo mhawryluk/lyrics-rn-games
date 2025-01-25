@@ -1,9 +1,16 @@
 import { Link } from "expo-router";
-import { useMemo, useState, type SetStateAction, type Dispatch } from "react";
+import {
+  useMemo,
+  useState,
+  type SetStateAction,
+  type Dispatch,
+  useEffect,
+} from "react";
 import cs from "classnames";
 import { View, Text, Pressable, ScrollView, TextInput } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as DropdownMenu from "zeego/dropdown-menu";
+import { SongCard } from "@/components/SongCard";
 
 export default function Mystery() {
   const [guessedWords, setGuessedWords] = useState(new Set<string>());
@@ -14,8 +21,9 @@ export default function Mystery() {
         verse.split(/\s/).filter((word) => word.trim() !== "")
       )
   );
+  const [songCardShowing, setSongCardShowing] = useState(false);
 
-  const songTitle = "State of Grace";
+  const songTitle = "Holy Ground";
 
   // useEffect(() => {
   //   fetch(
@@ -44,6 +52,13 @@ export default function Mystery() {
       ),
     [mysteryLyrics]
   );
+
+  useEffect(() => {
+    console.log([...allWords.values()]);
+    if ([...allWords.values()].every((word) => guessedWords.has(word))) {
+      setSongCardShowing(true);
+    }
+  }, [guessedWords, allWords]);
 
   return (
     <View>
@@ -94,6 +109,14 @@ export default function Mystery() {
         mysteryLyrics={mysteryLyrics}
         allWords={allWords}
       />
+
+      {songCardShowing && (
+        <SongCard
+          title={songTitle}
+          closeCallback={() => setSongCardShowing(false)}
+          artworkUrl="https://s.mxmcdn.net/images-storage/albums/3/7/0/5/5/2/14255073_350_350.jpg"
+        />
+      )}
     </View>
   );
 }
