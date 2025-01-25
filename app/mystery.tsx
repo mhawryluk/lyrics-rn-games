@@ -11,6 +11,7 @@ import { View, Text, Pressable, ScrollView, TextInput } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as DropdownMenu from "zeego/dropdown-menu";
 import { SongCard } from "@/components/SongCard";
+import Confetti from "@/components/Confetti";
 
 export default function Mystery() {
   const [guessedWords, setGuessedWords] = useState(new Set<string>());
@@ -54,7 +55,6 @@ export default function Mystery() {
   );
 
   useEffect(() => {
-    console.log([...allWords.values()]);
     if ([...allWords.values()].every((word) => guessedWords.has(word))) {
       setSongCardShowing(true);
     }
@@ -111,11 +111,16 @@ export default function Mystery() {
       />
 
       {songCardShowing && (
-        <SongCard
-          title={songTitle}
-          closeCallback={() => setSongCardShowing(false)}
-          artworkUrl="https://s.mxmcdn.net/images-storage/albums2/1/5/2/8/0/5/58508251_350_350.jpg"
-        />
+        <>
+          <SongCard
+            title={songTitle}
+            closeCallback={() => setSongCardShowing(false)}
+            colorOverlay="#144E52"
+            artworkUrl="https://s.mxmcdn.net/images-storage/albums2/1/5/2/8/0/5/58508251_350_350.jpg"
+          />
+
+          <Confetti />
+        </>
       )}
     </View>
   );

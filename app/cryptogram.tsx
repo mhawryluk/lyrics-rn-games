@@ -6,6 +6,7 @@ import { type SetStateAction, type Dispatch, useState, useEffect } from "react";
 import * as DropdownMenu from "zeego/dropdown-menu";
 import { shuffleArray } from "@/components/utils";
 import { SongCard } from "@/components/SongCard";
+import Confetti from "@/components/Confetti";
 
 export default function Cryptogram() {
   const [answers, setAnswers] = useState<Record<string, string | undefined>>(
@@ -13,20 +14,19 @@ export default function Cryptogram() {
   );
   const [songCardShowing, setSongCardShowing] = useState(false);
   const songTitle = "gold rush";
+  const allCodeLetters = [
+    ...new Set(
+      lyrics.flatMap((word) =>
+        word
+          .split("")
+          .map((letter) => encoding[letter])
+          .filter((letter) => letter !== undefined)
+      )
+    ),
+  ];
 
   useEffect(() => {
-    if (
-      checkIfWon(answers, correctAnswer, [
-        ...new Set(
-          lyrics.flatMap((word) =>
-            word
-              .split("")
-              .map((letter) => encoding[letter])
-              .filter((letter) => letter !== undefined)
-          )
-        ),
-      ])
-    ) {
+    if (checkIfWon(answers, correctAnswer, allCodeLetters)) {
       setSongCardShowing(true);
     }
   }, [answers, correctAnswer]);
@@ -63,7 +63,16 @@ export default function Cryptogram() {
 
             <DropdownMenu.Item
               key="give_up"
-              onSelect={() => setAnswers(correctAnswer)}
+              onSelect={() =>
+                setAnswers(
+                  Object.fromEntries(
+                    allCodeLetters.map((letter) => [
+                      letter,
+                      correctAnswer[letter],
+                    ])
+                  )
+                )
+              }
             >
               <DropdownMenu.ItemTitle>Give up</DropdownMenu.ItemTitle>
             </DropdownMenu.Item>
@@ -74,11 +83,15 @@ export default function Cryptogram() {
       <CryptogramGame answers={answers} setAnswers={setAnswers} />
 
       {songCardShowing && (
-        <SongCard
-          title={songTitle}
-          closeCallback={() => setSongCardShowing(false)}
-          artworkUrl="https://s.mxmcdn.net/images-storage/albums2/3/3/9/0/5/3/52350933_350_350.jpg"
-        />
+        <>
+          <SongCard
+            title={songTitle}
+            closeCallback={() => setSongCardShowing(false)}
+            colorOverlay="#D08E54"
+            artworkUrl="https://s.mxmcdn.net/images-storage/albums2/3/3/9/0/5/3/52350933_350_350.jpg"
+          />
+          <Confetti />
+        </>
       )}
     </View>
   );
@@ -251,7 +264,6 @@ function checkIfWon(
   correctAnswer: Record<string, string | undefined>,
   codeInLyrics: string[]
 ): boolean {
-  console.log(codeInLyrics, answer, correctAnswer);
   return codeInLyrics.every(
     (letter) => answer[letter] === correctAnswer[letter]
   );
