@@ -1,10 +1,50 @@
 import { Link } from "expo-router";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState, type SetStateAction, type Dispatch } from "react";
 import cs from "classnames";
 import { View, Text, Pressable, ScrollView, TextInput } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import * as DropdownMenu from "zeego/dropdown-menu";
 
 export default function Mystery() {
+  const [guessedWords, setGuessedWords] = useState(new Set<string>());
+  const [mysteryLyrics, setMysteryLyrics] = useState<string[][] | null>(
+    defaultMysteryLyrics
+      .split("\n\n")
+      .map((verse: string) =>
+        verse.split(/\s/).filter((word) => word.trim() !== "")
+      )
+  );
+
+  const songTitle = "State of Grace";
+
+  // useEffect(() => {
+  //   fetch(
+  //     `https://lyrics.lewdhutao.my.eu.org/musixmatch/lyrics-search?title=${songTitle.replaceAll(
+  //       /\s/g,
+  //       "%20"
+  //     )}&artist=taylor%20swift`
+  //   )
+  //     .then((r) => r.json())
+  //     .then((json) => {
+  //       console.log(json);
+  //       setMysteryLyrics(
+  //         (json["lyrics"] ?? defaultMysteryLyrics)
+  //           .split("\n\n")
+  //           .map((verse: string) => verse.split(/\s/))
+  //       );
+  //     });
+  // }, []);
+
+  const allWords = useMemo(
+    () =>
+      new Set(
+        (mysteryLyrics ?? [[]])
+          .flatMap((verse) => verse.map(transformWord))
+          .filter((word) => word && word.trim() !== "")
+      ),
+    [mysteryLyrics]
+  );
+
   return (
     <View>
       <View className="flex-row gap-4 items-center justify-between self-stretch py-4">
@@ -21,17 +61,39 @@ export default function Mystery() {
 
         <Text className="text-[#144E52] text-xl font-bold">Mystery Lyrics</Text>
 
-        <Pressable className="p-2 items-center opacity-0">
-          <Ionicons
-            name="menu"
-            className="text-white"
-            color="#144E52"
-            size={24}
-          />
-        </Pressable>
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <Ionicons
+              name="menu"
+              className="text-white"
+              color="#144E52"
+              size={24}
+            />
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content>
+            <DropdownMenu.Item
+              key="reset"
+              onSelect={() => setGuessedWords(new Set())}
+            >
+              <DropdownMenu.ItemTitle>Reset</DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+
+            <DropdownMenu.Item
+              key="give_up"
+              onSelect={() => setGuessedWords(new Set(allWords))}
+            >
+              <DropdownMenu.ItemTitle>Give up</DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
       </View>
 
-      <MysteryLyricsGame />
+      <MysteryLyricsGame
+        guessedWords={guessedWords}
+        setGuessedWords={setGuessedWords}
+        mysteryLyrics={mysteryLyrics}
+        allWords={allWords}
+      />
     </View>
   );
 }
@@ -43,40 +105,18 @@ function transformWord(word: string) {
     .trim();
 }
 
-function MysteryLyricsGame() {
-  const [guessedWords, setGuessedWords] = useState(new Set());
+function MysteryLyricsGame({
+  guessedWords,
+  setGuessedWords,
+  mysteryLyrics,
+  allWords,
+}: {
+  guessedWords: Set<string>;
+  setGuessedWords: Dispatch<SetStateAction<Set<string>>>;
+  mysteryLyrics: string[][] | null;
+  allWords: Set<string>;
+}) {
   const [input, setInput] = useState("");
-  const songTitle = "State of Grace";
-
-  const [mysteryLyrics, setMysteryLyrics] = useState<string[][] | null>(null);
-
-  useEffect(() => {
-    fetch(
-      `https://lyrics.lewdhutao.my.eu.org/musixmatch/lyrics-search?title=${songTitle.replaceAll(
-        /\s/g,
-        "%20"
-      )}&artist=taylor%20swift`
-    )
-      .then((r) => r.json())
-      .then((json) => {
-        console.log(json);
-        setMysteryLyrics(
-          (json["lyrics"] ?? defaultMysteryLyrics)
-            .split("\n\n")
-            .map((verse: string) => verse.split(/\s/))
-        );
-      });
-  }, []);
-
-  const allWords = useMemo(
-    () =>
-      new Set(
-        (mysteryLyrics ?? [[]])
-          .flatMap((verse) => verse.map(transformWord))
-          .filter((word) => word)
-      ),
-    [mysteryLyrics]
-  );
 
   if (mysteryLyrics === null) {
     return (
@@ -201,6 +241,4 @@ Tonight I'm gonna dance
 Like you were in this room
 But I don't wanna dance
 If I'm not dancing with you
-`
-  .split("\n\n")
-  .map((verse) => verse.split(/\s/));
+`;

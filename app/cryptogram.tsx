@@ -2,9 +2,15 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
 import { View, Text, Pressable, ScrollView } from "react-native";
 import cs from "classnames";
-import { useState } from "react";
+import { type SetStateAction, type Dispatch, useState } from "react";
+import * as DropdownMenu from "zeego/dropdown-menu";
+import { shuffleArray } from "@/components/utils";
 
 export default function Cryptogram() {
+  const [answers, setAnswers] = useState<Record<string, string | undefined>>(
+    {}
+  );
+
   return (
     <View>
       <View className="flex-row gap-4 items-center justify-between self-stretch py-4">
@@ -21,59 +27,48 @@ export default function Cryptogram() {
 
         <Text className="text-[#D08E54] text-xl font-bold">Cryptogram</Text>
 
-        <Pressable className="p-2 items-center opacity-0">
-          <Ionicons
-            name="menu"
-            className="text-white"
-            color="#D08E54"
-            size={24}
-          />
-        </Pressable>
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <Ionicons
+              name="menu"
+              className="text-white"
+              color="#D08E54"
+              size={20}
+            />
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content>
+            <DropdownMenu.Item key="reset" onSelect={() => setAnswers({})}>
+              <DropdownMenu.ItemTitle>Reset</DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+
+            <DropdownMenu.Item
+              key="give_up"
+              onSelect={() => setAnswers(correctAnswer)}
+            >
+              <DropdownMenu.ItemTitle>Give up</DropdownMenu.ItemTitle>
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
       </View>
 
-      <CryptogramGame />
+      <CryptogramGame answers={answers} setAnswers={setAnswers} />
     </View>
   );
 }
 
-function shuffleArray(array: unknown[]) {
-  const copy = [...array];
-
-  for (var i = copy.length - 1; i > 0; i--) {
-    let j: number | undefined;
-    while (j === undefined || copy[j] === copy[i]) {
-      j = Math.floor(Math.random() * i);
-    }
-
-    const temp = copy[i];
-    copy[i] = copy[j];
-    copy[j] = temp;
-  }
-
-  return copy;
-}
-
-const allLetters = "abcdefghijklmnopqrstuvwxyz";
-const shuffled = shuffleArray(allLetters.split(""));
-const encoding = Object.fromEntries(
-  allLetters
-    .split("")
-    .map((letter) => [
-      letter,
-      shuffled[letter.charCodeAt(0) - "a".charCodeAt(0)] as string | undefined,
-    ])
-);
-
-function CryptogramGame() {
+function CryptogramGame({
+  answers,
+  setAnswers,
+}: {
+  answers: Record<string, string | undefined>;
+  setAnswers: Dispatch<SetStateAction<Record<string, string | undefined>>>;
+}) {
   const [selectedIndex, setSelectedIndex] = useState<[number, number]>([
     -1, -1,
   ]);
   const selectedLetter = lyrics[selectedIndex[0]]
     ? lyrics[selectedIndex[0]][selectedIndex[1]]
     : undefined;
-  const [answers, setAnswers] = useState<Record<string, string | undefined>>(
-    {}
-  );
 
   return (
     <View className="h-[92%] justify-between gap-4">
@@ -85,7 +80,7 @@ function CryptogramGame() {
                 encoding[letter.toLowerCase()] !== undefined ? (
                   <LetterTile
                     key={j}
-                    letter={answers[letter] ?? " "}
+                    letter={answers[encoding[letter.toLowerCase()]!] ?? " "}
                     code={encoding[letter.toLowerCase()]!}
                     selected={selectedLetter === letter}
                     onClick={() => {
@@ -107,14 +102,15 @@ function CryptogramGame() {
       </ScrollView>
 
       <Keyboard
-        usedLetters={Object.keys(answers).filter(
-          (letter) => answers[letter] !== undefined
+        usedLetters={Object.values(answers).filter(
+          (letter) => letter !== undefined
         )}
         onLetterClick={(letter) => {
           if (selectedLetter) {
             setAnswers((answers) => ({
               ...answers,
-              [selectedLetter]: letter === " " ? undefined : letter,
+              [encoding[selectedLetter.toLowerCase()]!]:
+                letter === " " ? undefined : letter,
             }));
             if (letter !== " ") {
               setSelectedIndex(([i, j]) => {
@@ -124,7 +120,7 @@ function CryptogramGame() {
                 while (
                   newI < lyrics.length &&
                   (encoding[lyrics[newI][newJ]] === undefined ||
-                    answers[lyrics[newI][newJ]] !== undefined)
+                    answers[encoding[lyrics[newI][newJ]]!] !== undefined)
                 ) {
                   [newI, newJ] =
                     newJ + 1 < lyrics[newI].length
@@ -179,10 +175,9 @@ function Keyboard({
   usedLetters: string[];
   onLetterClick: (letter: string) => void;
 }) {
-  const letters = ["qwertyuiop", "asdfghjkl", "zxcvbnm "];
   return (
     <View className="bg-[#D08E54] rounded-lg p-4">
-      {letters.map((row, i) => (
+      {keyboardLetters.map((row, i) => (
         <View
           key={`row_${row}_${i}`}
           className="flex-row self-stretch justify-center"
@@ -195,7 +190,7 @@ function Keyboard({
               <Text
                 className={cs(
                   "font-extrabold text-white p-3 text-2xl",
-                  usedLetters.includes(letter) ? "opacity-50" : ""
+                  usedLetters.includes(letter.toLowerCase()) ? "opacity-50" : ""
                 )}
               >
                 {letter.toUpperCase() === " " ? "🧹" : letter.toUpperCase()}
@@ -207,6 +202,21 @@ function Keyboard({
     </View>
   );
 }
+
+const keyboardLetters = ["qwertyuiop", "asdfghjkl", "zxcvbnm "];
+const allLetters = "abcdefghijklmnopqrstuvwxyz";
+const shuffled = shuffleArray(allLetters.split(""));
+const encoding = Object.fromEntries(
+  allLetters
+    .split("")
+    .map((letter) => [
+      letter,
+      shuffled[letter.charCodeAt(0) - "a".charCodeAt(0)] as string | undefined,
+    ])
+);
+const correctAnswer = Object.fromEntries(
+  Object.keys(encoding).map((letter) => [encoding[letter], letter])
+);
 
 const lyrics = "I don’t like that falling feels like flying till the bone crush"
   .split(" ")
