@@ -2,14 +2,34 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Link } from "expo-router";
 import { View, Text, Pressable, ScrollView } from "react-native";
 import cs from "classnames";
-import { type SetStateAction, type Dispatch, useState } from "react";
+import { type SetStateAction, type Dispatch, useState, useEffect } from "react";
 import * as DropdownMenu from "zeego/dropdown-menu";
 import { shuffleArray } from "@/components/utils";
+import { SongCard } from "@/components/SongCard";
 
 export default function Cryptogram() {
   const [answers, setAnswers] = useState<Record<string, string | undefined>>(
     {}
   );
+  const [songCardShowing, setSongCardShowing] = useState(false);
+  const songTitle = "gold rush";
+
+  useEffect(() => {
+    if (
+      checkIfWon(answers, correctAnswer, [
+        ...new Set(
+          lyrics.flatMap((word) =>
+            word
+              .split("")
+              .map((letter) => encoding[letter])
+              .filter((letter) => letter !== undefined)
+          )
+        ),
+      ])
+    ) {
+      setSongCardShowing(true);
+    }
+  }, [answers, correctAnswer]);
 
   return (
     <View>
@@ -52,6 +72,14 @@ export default function Cryptogram() {
       </View>
 
       <CryptogramGame answers={answers} setAnswers={setAnswers} />
+
+      {songCardShowing && (
+        <SongCard
+          title={songTitle}
+          closeCallback={() => setSongCardShowing(false)}
+          artworkUrl="https://s.mxmcdn.net/images-storage/albums2/3/3/9/0/5/3/52350933_350_350.jpg"
+        />
+      )}
     </View>
   );
 }
@@ -217,6 +245,17 @@ const encoding = Object.fromEntries(
 const correctAnswer = Object.fromEntries(
   Object.keys(encoding).map((letter) => [encoding[letter], letter])
 );
+
+function checkIfWon(
+  answer: Record<string, string | undefined>,
+  correctAnswer: Record<string, string | undefined>,
+  codeInLyrics: string[]
+): boolean {
+  console.log(codeInLyrics, answer, correctAnswer);
+  return codeInLyrics.every(
+    (letter) => answer[letter] === correctAnswer[letter]
+  );
+}
 
 const lyrics = "I don’t like that falling feels like flying till the bone crush"
   .split(" ")

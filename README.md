@@ -1,6 +1,6 @@
 # Pubwe
 
-React Native application with lyric mini-games
+React Native application with lyric mini-games.
 
 <img src="./assets/images/icon.png" width=150 style="border-radius: 30px;">
 

@@ -114,7 +114,7 @@ export default function Mystery() {
         <SongCard
           title={songTitle}
           closeCallback={() => setSongCardShowing(false)}
-          artworkUrl="https://s.mxmcdn.net/images-storage/albums/3/7/0/5/5/2/14255073_350_350.jpg"
+          artworkUrl="https://s.mxmcdn.net/images-storage/albums2/1/5/2/8/0/5/58508251_350_350.jpg"
         />
       )}
     </View>
