@@ -12,6 +12,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import * as DropdownMenu from "zeego/dropdown-menu";
 import { SongCard } from "@/components/SongCard";
 import Confetti from "@/components/Confetti";
+import Animated from "react-native-reanimated";
 
 export default function Mystery() {
   const [guessedWords, setGuessedWords] = useState(new Set<string>());
@@ -203,14 +204,31 @@ function MysteryLyricsGame({
 
 function WordTile({ word, guessed }: { word: string; guessed: boolean }) {
   return (
-    <Text
-      className={cs(
-        "px-2 py-1 text-xl justify-center items-center font-mono font-bold rounded-lg",
-        guessed ? "opacity-100 text-[#144E52]" : "bg-[#144E52] opacity-50"
-      )}
-    >
-      {guessed ? word : " ".repeat(word.length)}
-    </Text>
+    <View className="relativ overflow-hidden rounded-lg">
+      <Text
+        className={cs(
+          "px-2 py-1 text-xl justify-center items-center font-mono font-bold",
+          guessed ? "opacity-100 text-[#144E52]" : "opacity-50"
+        )}
+      >
+        {guessed ? word : " ".repeat(word.length)}
+      </Text>
+
+      <Animated.View
+        style={{
+          backgroundColor: "#7f9492",
+          height: "100%",
+          position: "absolute",
+          right: 0,
+          top: 0,
+          width: guessed ? 0 : "100%",
+          transitionProperty: "width",
+          transitionTimingFunction: "easeInOut",
+          transitionDuration: "0.8s",
+          zIndex: 2,
+        }}
+      />
+    </View>
   );
 }
 
