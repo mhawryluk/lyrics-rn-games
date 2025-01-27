@@ -21,6 +21,7 @@ React Native application with song lyrics mini-games.
 - Expo Router
 - Zeego
 - NativeWind
+- TypeGPU
 - React Native Reanimated
 
 ## Local run
