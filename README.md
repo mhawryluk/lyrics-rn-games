@@ -21,7 +21,7 @@ React Native application with song lyrics mini-games.
 - Expo Router
 - Zeego
 - NativeWind
-- TypeGPU
+- [TypeGPU](https://github.com/software-mansion/TypeGPU)
 - React Native Reanimated
 
 ## Local run
@@ -30,7 +30,3 @@ React Native application with song lyrics mini-games.
 pnpm install
 pnpm ios
 ```
-
-
-
-
