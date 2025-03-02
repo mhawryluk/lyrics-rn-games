@@ -1,5 +1,5 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { Pressable, View, Image, Text, ImageBackground } from "react-native";
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { Image, ImageBackground, Pressable, Text, View } from 'react-native';
 
 export function SongCard({
   title,

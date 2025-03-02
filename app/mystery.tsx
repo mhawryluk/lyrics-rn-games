@@ -1,30 +1,29 @@
-import { Link } from "expo-router";
+import { SongCard } from '@/components/SongCard';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import cs from 'classnames';
+import { Link } from 'expo-router';
 import {
+  type Dispatch,
+  type SetStateAction,
+  useEffect,
   useMemo,
   useState,
-  type SetStateAction,
-  type Dispatch,
-  useEffect,
-} from "react";
-import cs from "classnames";
-import { View, Text, Pressable, ScrollView, TextInput } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import * as DropdownMenu from "zeego/dropdown-menu";
-import { SongCard } from "@/components/SongCard";
-import Animated from "react-native-reanimated";
+} from 'react';
+import { Pressable, ScrollView, Text, TextInput, View } from 'react-native';
+import Animated from 'react-native-reanimated';
+import * as DropdownMenu from 'zeego/dropdown-menu';
 
+const songTitle = 'Holy Ground';
 export default function Mystery() {
   const [guessedWords, setGuessedWords] = useState(new Set<string>());
   const [mysteryLyrics, setMysteryLyrics] = useState<string[][] | null>(
     defaultMysteryLyrics
-      .split("\n\n")
+      .split('\n\n')
       .map((verse: string) =>
-        verse.split(/\s/).filter((word) => word.trim() !== "")
-      )
+        verse.split(/\s/).filter((word) => word.trim() !== ''),
+      ),
   );
   const [songCardShowing, setSongCardShowing] = useState(false);
-
-  const songTitle = "Holy Ground";
 
   // useEffect(() => {
   //   fetch(
@@ -49,9 +48,9 @@ export default function Mystery() {
       new Set(
         (mysteryLyrics ?? [[]])
           .flatMap((verse) => verse.map(transformWord))
-          .filter((word) => word && word.trim() !== "")
+          .filter((word) => word && word.trim() !== ''),
       ),
-    [mysteryLyrics]
+    [mysteryLyrics],
   );
 
   useEffect(() => {
@@ -125,7 +124,7 @@ export default function Mystery() {
 function transformWord(word: string) {
   return word
     .toLowerCase()
-    .replaceAll(/[',\.\(\)]/g, "")
+    .replaceAll(/[',\.\(\)]/g, '')
     .trim();
 }
 
@@ -140,7 +139,7 @@ function MysteryLyricsGame({
   mysteryLyrics: string[][] | null;
   allWords: Set<string>;
 }) {
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
 
   if (mysteryLyrics === null) {
     return (
@@ -160,7 +159,7 @@ function MysteryLyricsGame({
 
             if (!guessedWords.has(guess) && allWords.has(guess)) {
               setGuessedWords(new Set(guessedWords).add(guess));
-              setInput("");
+              setInput('');
             } else {
               setInput(text);
             }
@@ -179,15 +178,22 @@ function MysteryLyricsGame({
       <ScrollView className="h-[85%]">
         <View className="gap-10">
           {mysteryLyrics.map((verse, i) => (
-            <View key={`${verse}_${i}`} className="flex-row flex-wrap gap-1">
+            <View
+              key={`${verse}_${
+                // biome-ignore lint/suspicious/noArrayIndexKey:
+                i
+              }`}
+              className="flex-row flex-wrap gap-1"
+            >
               {verse.map((word, i) =>
-                word.trim() !== "" ? (
+                word.trim() !== '' ? (
                   <WordTile
                     word={word.trim()}
                     guessed={guessedWords.has(transformWord(word))}
+                    // biome-ignore lint/suspicious/noArrayIndexKey:
                     key={i}
                   />
-                ) : null
+                ) : null,
               )}
             </View>
           ))}
@@ -202,24 +208,24 @@ function WordTile({ word, guessed }: { word: string; guessed: boolean }) {
     <View className="relativ overflow-hidden rounded-lg">
       <Text
         className={cs(
-          "px-2 py-1 text-xl justify-center items-center font-mono font-bold",
-          guessed ? "opacity-100 text-[#144E52]" : "opacity-50"
+          'px-2 py-1 text-xl justify-center items-center font-mono font-bold',
+          guessed ? 'opacity-100 text-[#144E52]' : 'opacity-50',
         )}
       >
-        {guessed ? word : " ".repeat(word.length)}
+        {guessed ? word : ' '.repeat(word.length)}
       </Text>
 
       <Animated.View
         style={{
-          backgroundColor: "#7f9492",
-          height: "100%",
-          position: "absolute",
+          backgroundColor: '#7f9492',
+          height: '100%',
+          position: 'absolute',
           right: 0,
           top: 0,
-          width: guessed ? 0 : "100%",
-          transitionProperty: "width",
-          transitionTimingFunction: "easeInOut",
-          transitionDuration: "0.8s",
+          width: guessed ? 0 : '100%',
+          transitionProperty: 'width',
+          transitionTimingFunction: 'ease-in-out',
+          transitionDuration: '0.8s',
           zIndex: 2,
         }}
       />

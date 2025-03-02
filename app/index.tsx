@@ -1,5 +1,5 @@
-import { Link } from "expo-router";
-import { Pressable, Text, View } from "react-native";
+import { Link } from 'expo-router';
+import { Pressable, Text, View } from 'react-native';
 
 export default function Index() {
   return (
@@ -30,18 +30,6 @@ export default function Index() {
             </Text>
           </Pressable>
         </Link>
-
-        {/* <Link
-          href="./daily"
-          asChild
-          className="bg-[#AE7268] p-6 rounded-3xl self-stretch items-center"
-        >
-          <Pressable>
-            <Text className="text-2xl text-white font-bold">
-              🗓️ Lyric of the Day
-            </Text>
-          </Pressable>
-        </Link> */}
       </View>
     </View>
   );

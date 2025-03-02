@@ -1466,27 +1466,6 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-wgpu (0.1.22):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
   - React-nativeconfig (0.76.6)
   - React-NativeModulesApple (0.76.6):
     - glog
@@ -1775,7 +1754,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated (4.0.0-beta.1):
+  - RNReanimated (4.0.0-beta.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1795,10 +1774,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated (= 4.0.0-beta.1)
-    - RNReanimated/worklets (= 4.0.0-beta.1)
+    - RNReanimated/reanimated (= 4.0.0-beta.2)
+    - RNReanimated/worklets (= 4.0.0-beta.2)
     - Yoga
-  - RNReanimated/reanimated (4.0.0-beta.1):
+  - RNReanimated/reanimated (4.0.0-beta.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1818,9 +1797,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated/apple (= 4.0.0-beta.1)
+    - RNReanimated/reanimated/apple (= 4.0.0-beta.2)
     - Yoga
-  - RNReanimated/reanimated/apple (4.0.0-beta.1):
+  - RNReanimated/reanimated/apple (4.0.0-beta.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1841,7 +1820,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated/worklets (4.0.0-beta.1):
+  - RNReanimated/worklets (4.0.0-beta.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1861,9 +1840,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/worklets/apple (= 4.0.0-beta.1)
+    - RNReanimated/worklets/apple (= 4.0.0-beta.2)
     - Yoga
-  - RNReanimated/worklets/apple (4.0.0-beta.1):
+  - RNReanimated/worklets/apple (4.0.0-beta.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1999,7 +1978,6 @@ DEPENDENCIES:
   - "react-native-menu (from `../node_modules/@react-native-menu/menu`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-webview (from `../node_modules/react-native-webview`)
-  - react-native-wgpu (from `../node_modules/react-native-wgpu`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -2158,8 +2136,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
-  react-native-wgpu:
-    :path: "../node_modules/react-native-wgpu"
   React-nativeconfig:
     :path: "../node_modules/react-native/ReactCommon"
   React-NativeModulesApple:
@@ -2285,7 +2261,6 @@ SPEC CHECKSUMS:
   react-native-menu: d611b0a73f5a1f62087fc76ffb8ad7607e622507
   react-native-safe-area-context: 458f6b948437afcb59198016b26bbd02ff9c3b47
   react-native-webview: 40b8823be3fac70f0404016e6aed754ef4307517
-  react-native-wgpu: 44595bae8ac7871b4a90ddecae2f9fc9562d8426
   React-nativeconfig: 539ff4de6ce3b694e8e751080568c281c84903ce
   React-NativeModulesApple: 771cc40b086281b820fe455fedebbe4341fd0c90
   React-perflogger: 4e80a5b8d61dfb38024e7d5b8efaf9ce1037d31f
@@ -2314,7 +2289,7 @@ SPEC CHECKSUMS:
   ReactCodegen: 484b223748d7489d7036db1cbf79896d297e33a7
   ReactCommon: 832cdd669aeecd430d9ca1975d15676b38d0b263
   RNGestureHandler: fc5ce5bf284640d3af6431c3a5c3bc121e98d045
-  RNReanimated: 2dfd13abf631ae01a48f6805d0022d3e34a4bb7c
+  RNReanimated: da551af05c2c89da007707024d0268fc3c833477
   RNScreens: d022507f2b6d76c73335e9e35aedcf7bb2f791b0
   SDWebImage: 8a6b7b160b4d710e2a22b6900e25301075c34cb3
   SDWebImageAVIFCoder: 00310d246aab3232ce77f1d8f0076f8c4b021d90

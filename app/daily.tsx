@@ -1,6 +1,6 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { Link } from "expo-router";
-import { View, Text, Pressable } from "react-native";
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { Link } from 'expo-router';
+import { Pressable, Text, View } from 'react-native';
 
 export default function Daily() {
   return (

@@ -1,34 +1,44 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { Link } from "expo-router";
-import { View, Text, Pressable, ScrollView } from "react-native";
-import cs from "classnames";
-import { type SetStateAction, type Dispatch, useState, useEffect } from "react";
-import * as DropdownMenu from "zeego/dropdown-menu";
-import { shuffleArray } from "@/components/utils";
-import { SongCard } from "@/components/SongCard";
+import { SongCard } from '@/components/SongCard';
+import { shuffleArray } from '@/components/utils';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import cs from 'classnames';
+import { Link } from 'expo-router';
+import {
+  type Dispatch,
+  type SetStateAction,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { Pressable, ScrollView, Text, View } from 'react-native';
+import * as DropdownMenu from 'zeego/dropdown-menu';
+
+const songTitle = 'gold rush';
 
 export default function Cryptogram() {
   const [answers, setAnswers] = useState<Record<string, string | undefined>>(
-    {}
+    {},
   );
   const [songCardShowing, setSongCardShowing] = useState(false);
-  const songTitle = "gold rush";
-  const allCodeLetters = [
-    ...new Set(
-      lyrics.flatMap((word) =>
-        word
-          .split("")
-          .map((letter) => encoding[letter])
-          .filter((letter) => letter !== undefined)
-      )
-    ),
-  ];
+  const allCodeLetters = useMemo(
+    () => [
+      ...new Set(
+        lyrics.flatMap((word) =>
+          word
+            .split('')
+            .map((letter) => encoding[letter])
+            .filter((letter) => letter !== undefined),
+        ),
+      ),
+    ],
+    [],
+  );
 
   useEffect(() => {
     if (checkIfWon(answers, correctAnswer, allCodeLetters)) {
       setSongCardShowing(true);
     }
-  }, [answers, correctAnswer]);
+  }, [answers, allCodeLetters]);
 
   return (
     <View>
@@ -68,8 +78,8 @@ export default function Cryptogram() {
                     allCodeLetters.map((letter) => [
                       letter,
                       correctAnswer[letter],
-                    ])
-                  )
+                    ]),
+                  ),
                 )
               }
             >
@@ -112,13 +122,24 @@ function CryptogramGame({
       <ScrollView className="h-full">
         <View className="flex-wrap flex-row gap-6">
           {lyrics.map((word, i) => (
-            <View key={`word_${i}`} className="flex-row gap-2">
-              {word.split("").map((letter, j) =>
+            <View
+              key={`word_${word}_${
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                i
+              }`}
+              className="flex-row gap-2"
+            >
+              {word.split('').map((letter, j) =>
                 encoding[letter.toLowerCase()] !== undefined ? (
                   <LetterTile
-                    key={j}
-                    letter={answers[encoding[letter.toLowerCase()]!] ?? " "}
-                    code={encoding[letter.toLowerCase()]!}
+                    key={`${letter}_${
+                      // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                      j
+                    }`}
+                    letter={
+                      answers[encoding[letter.toLowerCase()] as string] ?? ' '
+                    }
+                    code={encoding[letter.toLowerCase()] as string}
                     selected={selectedLetter === letter}
                     onClick={() => {
                       setSelectedIndex([i, j]);
@@ -131,7 +152,7 @@ function CryptogramGame({
                   >
                     {letter}
                   </Text>
-                )
+                ),
               )}
             </View>
           ))}
@@ -140,16 +161,16 @@ function CryptogramGame({
 
       <Keyboard
         usedLetters={Object.values(answers).filter(
-          (letter) => letter !== undefined
+          (letter) => letter !== undefined,
         )}
         onLetterClick={(letter) => {
           if (selectedLetter) {
             setAnswers((answers) => ({
               ...answers,
-              [encoding[selectedLetter.toLowerCase()]!]:
-                letter === " " ? undefined : letter,
+              [encoding[selectedLetter.toLowerCase()] as string]:
+                letter === ' ' ? undefined : letter,
             }));
-            if (letter !== " ") {
+            if (letter !== ' ') {
               setSelectedIndex(([i, j]) => {
                 let [newI, newJ] =
                   j + 1 < lyrics[i].length ? [i, j + 1] : [i + 1, 0];
@@ -157,7 +178,8 @@ function CryptogramGame({
                 while (
                   newI < lyrics.length &&
                   (encoding[lyrics[newI][newJ]] === undefined ||
-                    answers[encoding[lyrics[newI][newJ]]!] !== undefined)
+                    answers[encoding[lyrics[newI][newJ]] as string] !==
+                      undefined)
                 ) {
                   [newI, newJ] =
                     newJ + 1 < lyrics[newI].length
@@ -191,11 +213,11 @@ function LetterTile({
       <View className="justify-center">
         <Text
           className={cs(
-            "bg-[#D08E54] p-3 text-2xl font-mono font-bold rounded-md",
-            selected ? "" : "bg-[#d08e5480]"
+            'bg-[#D08E54] p-3 text-2xl font-mono font-bold rounded-md',
+            selected ? '' : 'bg-[#d08e5480]',
           )}
         >
-          {letter?.toUpperCase() ?? ""}
+          {letter?.toUpperCase() ?? ''}
         </Text>
         <Text className="p-3 text-2xl font-mono font-bold">
           {code?.toUpperCase()}
@@ -216,21 +238,29 @@ function Keyboard({
     <View className="bg-[#D08E54] rounded-lg p-4">
       {keyboardLetters.map((row, i) => (
         <View
-          key={`row_${row}_${i}`}
+          key={`row_${row}_${
+            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+            i
+          }`}
           className="flex-row self-stretch justify-center"
         >
-          {row.split("").map((letter, j) => (
+          {row.split('').map((letter, j) => (
             <Pressable
-              key={`letter_${letter}_${j}`}
+              key={`letter_${letter}_${
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                j
+              }`}
               onPress={() => onLetterClick(letter)}
             >
               <Text
                 className={cs(
-                  "font-extrabold text-white p-3 text-2xl",
-                  usedLetters.includes(letter.toLowerCase()) ? "opacity-50" : ""
+                  'font-extrabold text-white p-3 text-2xl',
+                  usedLetters.includes(letter.toLowerCase())
+                    ? 'opacity-50'
+                    : '',
                 )}
               >
-                {letter.toUpperCase() === " " ? "🧹" : letter.toUpperCase()}
+                {letter.toUpperCase() === ' ' ? '🧹' : letter.toUpperCase()}
               </Text>
             </Pressable>
           ))}
@@ -240,31 +270,31 @@ function Keyboard({
   );
 }
 
-const keyboardLetters = ["qwertyuiop", "asdfghjkl", "zxcvbnm "];
-const allLetters = "abcdefghijklmnopqrstuvwxyz";
-const shuffled = shuffleArray(allLetters.split(""));
+const keyboardLetters = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm '];
+const allLetters = 'abcdefghijklmnopqrstuvwxyz';
+const shuffled = shuffleArray(allLetters.split(''));
 const encoding = Object.fromEntries(
   allLetters
-    .split("")
+    .split('')
     .map((letter) => [
       letter,
-      shuffled[letter.charCodeAt(0) - "a".charCodeAt(0)] as string | undefined,
-    ])
+      shuffled[letter.charCodeAt(0) - 'a'.charCodeAt(0)] as string | undefined,
+    ]),
 );
 const correctAnswer = Object.fromEntries(
-  Object.keys(encoding).map((letter) => [encoding[letter], letter])
+  Object.keys(encoding).map((letter) => [encoding[letter], letter]),
 );
 
 function checkIfWon(
   answer: Record<string, string | undefined>,
   correctAnswer: Record<string, string | undefined>,
-  codeInLyrics: string[]
+  codeInLyrics: string[],
 ): boolean {
   return codeInLyrics.every(
-    (letter) => answer[letter] === correctAnswer[letter]
+    (letter) => answer[letter] === correctAnswer[letter],
   );
 }
 
-const lyrics = "I don’t like that falling feels like flying till the bone crush"
-  .split(" ")
+const lyrics = 'I don’t like that falling feels like flying till the bone crush'
+  .split(' ')
   .map((word) => word.toLowerCase());
