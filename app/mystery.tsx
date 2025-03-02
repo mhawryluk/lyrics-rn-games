@@ -1,3 +1,4 @@
+import Colors from '@/components/Colors';
 import { SongCard } from '@/components/SongCard';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import cs from 'classnames';
@@ -67,20 +68,20 @@ export default function Mystery() {
             <Ionicons
               name="chevron-back"
               className="text-white"
-              color="#144E52"
+              color={Colors.green}
               size={20}
             />
           </Pressable>
         </Link>
 
-        <Text className="text-[#144E52] text-xl font-bold">Mystery Lyrics</Text>
+        <Text className="text-pw-green text-xl font-bold">Mystery Lyrics</Text>
 
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <Ionicons
               name="menu"
               className="text-white"
-              color="#144E52"
+              color={Colors.green}
               size={24}
             />
           </DropdownMenu.Trigger>
@@ -113,7 +114,7 @@ export default function Mystery() {
         <SongCard
           title={songTitle}
           closeCallback={() => setSongCardShowing(false)}
-          colorOverlay="#144E52"
+          colorOverlay={Colors.green}
           artworkUrl="https://s.mxmcdn.net/images-storage/albums2/1/5/2/8/0/5/58508251_350_350.jpg"
         />
       )}
@@ -144,7 +145,7 @@ function MysteryLyricsGame({
   if (mysteryLyrics === null) {
     return (
       <View className="justify-center self-stretch">
-        <Text className="text-[#144E52] text-2xl font-bold">Loading...</Text>
+        <Text className="text-pw-green text-2xl font-bold">Loading...</Text>
       </View>
     );
   }
@@ -153,7 +154,7 @@ function MysteryLyricsGame({
     <View className="gap-4 justify-end">
       <View className="flex-row items-center justify-between py-2">
         <TextInput
-          className="border-[#144E52] border-2 opacity-50 rounded-lg h-12 max-w-[70%] flex-1 p-2 text-[#144E52] font-bold"
+          className="border-pw-green border-2 opacity-50 rounded-lg h-12 max-w-[70%] flex-1 p-2 text-pw-green font-bold"
           onChangeText={(text) => {
             const guess = transformWord(text);
 
@@ -166,7 +167,7 @@ function MysteryLyricsGame({
           }}
           value={input}
         />
-        <Text className="text-[#144E52] text-2xl font-bold">
+        <Text className="text-pw-green text-2xl font-bold">
           {
             mysteryLyrics
               .flat()
@@ -209,7 +210,7 @@ function WordTile({ word, guessed }: { word: string; guessed: boolean }) {
       <Text
         className={cs(
           'px-2 py-1 text-xl justify-center items-center font-mono font-bold',
-          guessed ? 'opacity-100 text-[#144E52]' : 'opacity-50',
+          guessed ? 'opacity-100 text-pw-green' : 'opacity-50',
         )}
       >
         {guessed ? word : ' '.repeat(word.length)}
@@ -217,7 +218,7 @@ function WordTile({ word, guessed }: { word: string; guessed: boolean }) {
 
       <Animated.View
         style={{
-          backgroundColor: '#7f9492',
+          backgroundColor: Colors.greenLight,
           height: '100%',
           position: 'absolute',
           right: 0,

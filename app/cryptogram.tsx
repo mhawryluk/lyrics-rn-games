@@ -1,3 +1,4 @@
+import Colors from '@/components/Colors';
 import { SongCard } from '@/components/SongCard';
 import { shuffleArray } from '@/components/utils';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -48,20 +49,20 @@ export default function Cryptogram() {
             <Ionicons
               name="chevron-back"
               className="text-white"
-              color="#D08E54"
+              color={Colors.orange}
               size={20}
             />
           </Pressable>
         </Link>
 
-        <Text className="text-[#D08E54] text-xl font-bold">Cryptogram</Text>
+        <Text className="text-pw-orange text-xl font-bold">Cryptogram</Text>
 
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             <Ionicons
               name="menu"
               className="text-white"
-              color="#D08E54"
+              color={Colors.orange}
               size={20}
             />
           </DropdownMenu.Trigger>
@@ -95,7 +96,7 @@ export default function Cryptogram() {
         <SongCard
           title={songTitle}
           closeCallback={() => setSongCardShowing(false)}
-          colorOverlay="#D08E54"
+          colorOverlay={Colors.orange}
           artworkUrl="https://s.mxmcdn.net/images-storage/albums2/3/3/9/0/5/3/52350933_350_350.jpg"
         />
       )}
@@ -213,8 +214,8 @@ function LetterTile({
       <View className="justify-center">
         <Text
           className={cs(
-            'bg-[#D08E54] p-3 text-2xl font-mono font-bold rounded-md',
-            selected ? '' : 'bg-[#d08e5480]',
+            'bg-pw-orange p-3 text-2xl font-mono font-bold rounded-md',
+            selected ? '' : 'bg-pw-orange-light',
           )}
         >
           {letter?.toUpperCase() ?? ''}
@@ -235,7 +236,7 @@ function Keyboard({
   onLetterClick: (letter: string) => void;
 }) {
   return (
-    <View className="bg-[#D08E54] rounded-lg p-4">
+    <View className="bg-pw-orange rounded-lg p-4">
       {keyboardLetters.map((row, i) => (
         <View
           key={`row_${row}_${
