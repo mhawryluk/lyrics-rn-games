@@ -6,7 +6,6 @@ import { type SetStateAction, type Dispatch, useState, useEffect } from "react";
 import * as DropdownMenu from "zeego/dropdown-menu";
 import { shuffleArray } from "@/components/utils";
 import { SongCard } from "@/components/SongCard";
-import Confetti from "@/components/Confetti";
 
 export default function Cryptogram() {
   const [answers, setAnswers] = useState<Record<string, string | undefined>>(
@@ -83,15 +82,12 @@ export default function Cryptogram() {
       <CryptogramGame answers={answers} setAnswers={setAnswers} />
 
       {songCardShowing && (
-        <>
-          <SongCard
-            title={songTitle}
-            closeCallback={() => setSongCardShowing(false)}
-            colorOverlay="#D08E54"
-            artworkUrl="https://s.mxmcdn.net/images-storage/albums2/3/3/9/0/5/3/52350933_350_350.jpg"
-          />
-          <Confetti />
-        </>
+        <SongCard
+          title={songTitle}
+          closeCallback={() => setSongCardShowing(false)}
+          colorOverlay="#D08E54"
+          artworkUrl="https://s.mxmcdn.net/images-storage/albums2/3/3/9/0/5/3/52350933_350_350.jpg"
+        />
       )}
     </View>
   );
