@@ -1,4 +1,4 @@
-# Pubwe
+# Lyrics Mini-Games
 
 React Native application with song lyrics mini-games.
 
